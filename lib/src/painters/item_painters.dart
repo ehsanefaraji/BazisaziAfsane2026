@@ -214,7 +214,7 @@ class ExitDoorPainter extends CustomPainter {
     final starPaint = Paint()
       ..shader = const RadialGradient(
         colors: [Color(0xFFFFF59D), Color(0xFFFFD54F), Color(0xFFFF8F00)],
-      ).createShader(const Rect.fromCircle(center: Offset.zero, radius: 5));
+      ).createShader(Rect.fromCircle(center: Offset.zero, radius: 5));
     final starPath = Path();
     for (int i = 0; i < 5; i++) {
       final outerA = -pi / 2 + i * 2 * pi / 5;
@@ -265,7 +265,7 @@ class FlowerPainter extends CustomPainter {
     final petalPaint = Paint()
       ..shader = const RadialGradient(
         colors: [Color(0xFFCE93D8), Color(0xFFAB47BC)],
-      ).createShader(const Rect.fromCircle(center: Offset.zero, radius: 8));
+      ).createShader(Rect.fromCircle(center: Offset.zero, radius: 8));
     for (int i = 0; i < 6; i++) {
       final a = i * pi / 3;
       final cx = 8 * cos(a);
@@ -448,7 +448,7 @@ class ExtraLifePainter extends CustomPainter {
     final heartPaint = Paint()
       ..shader = const RadialGradient(
         colors: [Color(0xFFF48FB1), Color(0xFFEC407A), Color(0xFFAD1457)],
-      ).createShader(const Rect.fromCircle(center: Offset.zero, radius: 14));
+      ).createShader(Rect.fromCircle(center: Offset.zero, radius: 14));
     final path = Path()
       ..moveTo(0, 10)
       ..quadraticBezierTo(-14, 0, -14, -4)
