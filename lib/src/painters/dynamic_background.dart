@@ -26,9 +26,9 @@ class DynamicBackground extends CustomPainter {
       case Environment.forest:
         _drawStars(canvas, size, count: 60);
         _drawMoon(canvas, size);
-        _drawMountains(canvas, size, h * 0.55, h * 0.18, 4, const Color(0xFF311B92).withValues(alpha: 0.7), scrollOffset * 0.15);
-        _drawMountains(canvas, size, h * 0.7, h * 0.22, 5, const Color(0xFF1B5E20).withValues(alpha: 0.85), scrollOffset * 0.35);
-        _drawTrees(canvas, size, h * 0.88, 7, const Color(0xFF1B5E20), scrollOffset * 0.85);
+        _drawMountains(canvas, size, h * 0.55, h * 0.18, 4, Paint()..color = const Color(0xFF311B92).withValues(alpha: 0.7), scrollOffset * 0.15);
+        _drawMountains(canvas, size, h * 0.7, h * 0.22, 5, Paint()..color = const Color(0xFF1B5E20).withValues(alpha: 0.85), scrollOffset * 0.35);
+        _drawTrees(canvas, size, h * 0.88, 7, Paint()..color = const Color(0xFF1B5E20), scrollOffset * 0.85);
         _drawSparkles(canvas, size, count: 30);
         break;
       case Environment.sky:
@@ -122,7 +122,7 @@ class DynamicBackground extends CustomPainter {
         final towerPaint = Paint()..color = const Color(0xFF4527A0).withValues(alpha: 0.7);
         for (int i = 0; i < 5; i++) {
           final x = (i * w / 5 + scrollOffset * 0.2) % w;
-          final towerH = 80 + (i * 20);
+          final towerH = (80 + i * 20).toDouble();
           canvas.drawRect(Rect.fromLTWH(x - 15, h - towerH, 30, towerH), towerPaint);
           // سقف مخروطی
           final roofPath = Path()
