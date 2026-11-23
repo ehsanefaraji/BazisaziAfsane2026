@@ -1,5 +1,4 @@
-/// نقاش روباه نسخهٔ ۵ — با جزئیات بیشتر: دم متحرک، چشم‌های درخشان،
-/// شنل با grain، حالت‌های idle/run/jump/fall/hurt
+/// نقاش روباه — با جزئیات کامل، همه اعداد double
 import 'dart:math';
 import 'package:flutter/material.dart';
 
@@ -13,210 +12,198 @@ class FoxCharacterPainter extends CustomPainter {
 
   const FoxCharacterPainter({
     this.pose = FoxPose.idle,
-    this.breathPhase = 0,
-    this.runPhase = 0,
+    this.breathPhase = 0.0,
+    this.runPhase = 0.0,
     this.hasShield = false,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
-    final s = size.width / 100;
+    final s = size.width / 100.0;
     canvas.save();
-    canvas.translate(size.width / 2, size.height / 2);
+    canvas.translate(size.width / 2.0, size.height / 2.0);
     canvas.scale(s);
 
-    // سپر (اگر فعال است)
     if (hasShield) {
       final shieldGlow = Paint()
-        ..color = const Color(0xFF42A5F5).withValues(alpha: 0.4 + 0.2 * sin(breathPhase * 2));
-      canvas.drawCircle(Offset.zero, 36, shieldGlow);
+        ..color = const Color(0xFF42A5F5).withValues(alpha: 0.4 + 0.2 * sin(breathPhase * 2.0));
+      canvas.drawCircle(Offset.zero, 36.0, shieldGlow);
       final shieldRing = Paint()
         ..color = const Color(0xFF42A5F5)
         ..style = PaintingStyle.stroke
-        ..strokeWidth = 2;
-      canvas.drawCircle(Offset.zero, 32, shieldRing);
+        ..strokeWidth = 2.0;
+      canvas.drawCircle(Offset.zero, 32.0, shieldRing);
     }
 
-    // اعمال pose-specific transforms
-    double squash = 1;
+    double squash = 1.0;
     if (pose == FoxPose.idle) {
-      canvas.translate(0, sin(breathPhase) * 1.5);
+      canvas.translate(0.0, sin(breathPhase) * 1.5);
     } else if (pose == FoxPose.jump) {
       squash = 1.18;
-      canvas.scale(1 / squash, squash);
+      canvas.scale(1.0 / squash, squash);
     } else if (pose == FoxPose.fall) {
       squash = 0.85;
-      canvas.scale(1 / squash, squash);
+      canvas.scale(1.0 / squash, squash);
     } else if (pose == FoxPose.hurt) {
-      canvas.rotate(sin(breathPhase * 8) * 0.15);
+      canvas.rotate(sin(breathPhase * 8.0) * 0.15);
     }
 
-    // شنل بنفش با sway هنگام run
-    final capeSway = (pose == FoxPose.run ? sin(runPhase * 2) * 4 : 0).toDouble();
+    // شنل
+    final double capeSway = (pose == FoxPose.run ? sin(runPhase * 2.0) * 4.0 : 0.0);
     final capePaint = Paint()..color = const Color(0xFF7E57C2);
     final capePath = Path()
-      ..moveTo(-22, -10)
-      ..quadraticBezierTo(-32 - capeSway, 14, -28 - capeSway, 40)
-      ..quadraticBezierTo(-15 - capeSway, 34, -8, 25)
-      ..quadraticBezierTo(-12, 5, -22, -10)
+      ..moveTo(-22.0, -10.0)
+      ..quadraticBezierTo(-32.0 - capeSway, 14.0, -28.0 - capeSway, 40.0)
+      ..quadraticBezierTo(-15.0 - capeSway, 34.0, -8.0, 25.0)
+      ..quadraticBezierTo(-12.0, 5.0, -22.0, -10.0)
       ..close();
     canvas.drawPath(capePath, capePaint);
-    // لبهٔ روشن شنل
     final capeEdgePath = Path()
-      ..moveTo(-28 - capeSway, 32)
-      ..quadraticBezierTo(-22 - capeSway, 24, -14, 26)
-      ..lineTo(-16, 32)
+      ..moveTo(-28.0 - capeSway, 32.0)
+      ..quadraticBezierTo(-22.0 - capeSway, 24.0, -14.0, 26.0)
+      ..lineTo(-16.0, 32.0)
       ..close();
     canvas.drawPath(capeEdgePath, Paint()..color = const Color(0xFFB388FF));
-    // نقاط درخشان روی شنل
     final sparklePaint = Paint()..color = const Color(0xFFFFF59D);
     for (int i = 0; i < 3; i++) {
-      final sy = -5 + i * 15;
-      final sx = -20 - capeSway * (i + 1) * 0.3;
-      canvas.drawCircle(Offset(sx, sy), 1, sparklePaint);
+      final sy = (-5.0 + i * 15.0);
+      final sx = -20.0 - capeSway * (i + 1) * 0.3;
+      canvas.drawCircle(Offset(sx, sy), 1.0, sparklePaint);
     }
 
-    // دم پف‌دار با حرکت نوسانی شدیدتر
-    final tailY = pose == FoxPose.run ? -8 : 0;
-    final tailSway = (sin(breathPhase * 1.5) * 3).toDouble();
+    // دم
+    final double tailY = pose == FoxPose.run ? -8.0 : 0.0;
+    final double tailSway = sin(breathPhase * 1.5) * 3.0;
     final tailPaint = Paint()..color = const Color(0xFFFF7043);
     final tailPath = Path()
-      ..moveTo(-18, 15 + tailY)
-      ..quadraticBezierTo(-40 - tailSway, -2 + tailY, -34 - tailSway, -22 + tailY)
-      ..quadraticBezierTo(-22, -10 + tailY, -16, 5 + tailY)
+      ..moveTo(-18.0, 15.0 + tailY)
+      ..quadraticBezierTo(-40.0 - tailSway, -2.0 + tailY, -34.0 - tailSway, -22.0 + tailY)
+      ..quadraticBezierTo(-22.0, -10.0 + tailY, -16.0, 5.0 + tailY)
       ..close();
     canvas.drawPath(tailPath, tailPaint);
-    // نوک سفید دم با گرادیان
     final tailTipPaint = Paint()..color = Colors.white;
-    canvas.drawCircle(Offset(-32 - tailSway, -16 + tailY), 7, tailTipPaint);
-    // سایه در نوک دم
-    canvas.drawCircle(Offset(-29 - tailSway, -13 + tailY), 3, Paint()..color = const Color(0xFFFFCCBC));
+    canvas.drawCircle(Offset(-32.0 - tailSway, -16.0 + tailY), 7.0, tailTipPaint);
+    canvas.drawCircle(Offset(-29.0 - tailSway, -13.0 + tailY), 3.0, Paint()..color = const Color(0xFFFFCCBC));
 
     // بدن
     final bodyPaint = Paint()..color = const Color(0xFFFF7043);
     final bodyPath = Path()
-      ..moveTo(-18, -8)
-      ..quadraticBezierTo(-22, 15, -10, 22)
-      ..lineTo(10, 22)
-      ..quadraticBezierTo(22, 15, 18, -8)
+      ..moveTo(-18.0, -8.0)
+      ..quadraticBezierTo(-22.0, 15.0, -10.0, 22.0)
+      ..lineTo(10.0, 22.0)
+      ..quadraticBezierTo(22.0, 15.0, 18.0, -8.0)
       ..close();
     canvas.drawPath(bodyPath, bodyPaint);
-    // شکم سفید
     canvas.drawPath(
       Path()
-        ..moveTo(-8, -2)
-        ..quadraticBezierTo(-10, 18, 0, 22)
-        ..quadraticBezierTo(10, 18, 8, -2)
+        ..moveTo(-8.0, -2.0)
+        ..quadraticBezierTo(-10.0, 18.0, 0.0, 22.0)
+        ..quadraticBezierTo(10.0, 18.0, 8.0, -2.0)
         ..close(),
       Paint()..color = const Color(0xFFFFF3E0),
     );
-    // سایه روی بدن
     final bodyShadePaint = Paint()..color = const Color(0xFFE64A19).withValues(alpha: 0.3);
     canvas.drawPath(
       Path()
-        ..moveTo(8, -5)
-        ..quadraticBezierTo(15, 5, 12, 18)
-        ..lineTo(18, 18)
-        ..quadraticBezierTo(22, 10, 18, -8)
+        ..moveTo(8.0, -5.0)
+        ..quadraticBezierTo(15.0, 5.0, 12.0, 18.0)
+        ..lineTo(18.0, 18.0)
+        ..quadraticBezierTo(22.0, 10.0, 18.0, -8.0)
         ..close(),
       bodyShadePaint,
     );
 
-    // پاها (انیمیشن دویدن پیشرفته)
+    // پاها
     final legPaint = Paint()..color = const Color(0xFFE64A19);
     if (pose == FoxPose.run) {
       final phase1 = sin(runPhase);
       final phase2 = sin(runPhase + 3.14);
       canvas.save();
-      canvas.translate(-6, 20);
+      canvas.translate(-6.0, 20.0);
       canvas.rotate(phase1 * 0.5);
-      canvas.drawRect(Rect.fromLTWH(-3, 0, 7, 14), legPaint);
+      canvas.drawRect(Rect.fromLTWH(-3.0, 0.0, 7.0, 14.0), legPaint);
       canvas.restore();
       canvas.save();
-      canvas.translate(6, 20);
+      canvas.translate(6.0, 20.0);
       canvas.rotate(phase2 * 0.5);
-      canvas.drawRect(Rect.fromLTWH(-4, 0, 7, 14), legPaint);
+      canvas.drawRect(Rect.fromLTWH(-4.0, 0.0, 7.0, 14.0), legPaint);
       canvas.restore();
     } else if (pose == FoxPose.jump || pose == FoxPose.fall) {
-      canvas.drawRect(Rect.fromLTWH(-10, 17, 7, 9), legPaint);
-      canvas.drawRect(Rect.fromLTWH(3, 17, 7, 9), legPaint);
+      canvas.drawRect(Rect.fromLTWH(-10.0, 17.0, 7.0, 9.0), legPaint);
+      canvas.drawRect(Rect.fromLTWH(3.0, 17.0, 7.0, 9.0), legPaint);
     } else {
-      canvas.drawRect(Rect.fromLTWH(-9, 20, 6, 10), legPaint);
-      canvas.drawRect(Rect.fromLTWH(3, 20, 6, 10), legPaint);
+      canvas.drawRect(Rect.fromLTWH(-9.0, 20.0, 6.0, 10.0), legPaint);
+      canvas.drawRect(Rect.fromLTWH(3.0, 20.0, 6.0, 10.0), legPaint);
     }
 
     // سر
-    canvas.drawCircle(Offset.zero, 22, bodyPaint);
+    canvas.drawCircle(Offset.zero, 22.0, bodyPaint);
 
     // گوش‌ها
     final earPaint = Paint()..color = const Color(0xFFFF7043);
     canvas.drawPath(
       Path()
-        ..moveTo(-20, -18)
-        ..lineTo(-14, -34)
-        ..lineTo(-8, -18)
+        ..moveTo(-20.0, -18.0)
+        ..lineTo(-14.0, -34.0)
+        ..lineTo(-8.0, -18.0)
         ..close(),
       earPaint,
     );
     canvas.drawPath(
       Path()
-        ..moveTo(20, -18)
-        ..lineTo(14, -34)
-        ..lineTo(8, -18)
+        ..moveTo(20.0, -18.0)
+        ..lineTo(14.0, -34.0)
+        ..lineTo(8.0, -18.0)
         ..close(),
       earPaint,
     );
     final innerEarPaint = Paint()..color = const Color(0xFFF8BBD0);
     canvas.drawPath(
       Path()
-        ..moveTo(-17, -19)
-        ..lineTo(-14, -29)
-        ..lineTo(-11, -19)
+        ..moveTo(-17.0, -19.0)
+        ..lineTo(-14.0, -29.0)
+        ..lineTo(-11.0, -19.0)
         ..close(),
       innerEarPaint,
     );
     canvas.drawPath(
       Path()
-        ..moveTo(17, -19)
-        ..lineTo(14, -29)
-        ..lineTo(11, -19)
+        ..moveTo(17.0, -19.0)
+        ..lineTo(14.0, -29.0)
+        ..lineTo(11.0, -19.0)
         ..close(),
       innerEarPaint,
     );
 
-    // پوزه سفید
+    // پوزه
     canvas.drawOval(
-      Rect.fromCenter(center: const Offset(0, 6), width: 18, height: 14),
+      Rect.fromCenter(center: const Offset(0.0, 6.0), width: 18.0, height: 14.0),
       Paint()..color = const Color(0xFFFFF3E0),
     );
-
     // بینی
     canvas.drawOval(
-      Rect.fromCenter(center: const Offset(0, 2), width: 6, height: 5),
+      Rect.fromCenter(center: const Offset(0.0, 2.0), width: 6.0, height: 5.0),
       Paint()..color = const Color(0xFF2E1840),
     );
-    // درخشش بینی
-    canvas.drawCircle(const Offset(-1, 1), 1, Paint()..color = Colors.white.withValues(alpha: 0.6));
+    canvas.drawCircle(const Offset(-1.0, 1.0), 1.0, Paint()..color = Colors.white.withValues(alpha: 0.6));
 
-    // چشم‌های درخشان بزرگتر
+    // چشم‌ها
     final eyeWhitePaint = Paint()..color = Colors.white;
-    canvas.drawCircle(const Offset(-9, -4), 7, eyeWhitePaint);
-    canvas.drawCircle(const Offset(9, -4), 7, eyeWhitePaint);
-    // مردمک
+    canvas.drawCircle(const Offset(-9.0, -4.0), 7.0, eyeWhitePaint);
+    canvas.drawCircle(const Offset(9.0, -4.0), 7.0, eyeWhitePaint);
     final pupilColor = pose == FoxPose.hurt ? const Color(0xFFFF5252) : const Color(0xFF2E1840);
-    canvas.drawCircle(const Offset(-9, -4), 4.2, Paint()..color = pupilColor);
-    canvas.drawCircle(const Offset(9, -4), 4.2, Paint()..color = pupilColor);
-    // درخشش چشم
+    canvas.drawCircle(const Offset(-9.0, -4.0), 4.2, Paint()..color = pupilColor);
+    canvas.drawCircle(const Offset(9.0, -4.0), 4.2, Paint()..color = pupilColor);
     canvas.drawCircle(const Offset(-7.5, -5.5), 1.8, eyeWhitePaint);
     canvas.drawCircle(const Offset(10.5, -5.5), 1.8, eyeWhitePaint);
-    // ابروها (در حالت hurt خشمگین)
+
     if (pose == FoxPose.hurt) {
       final browPaint = Paint()
         ..color = const Color(0xFF2E1840)
         ..style = PaintingStyle.stroke
         ..strokeWidth = 1.6;
-      canvas.drawLine(const Offset(-13, -12), const Offset(-5, -10), browPaint);
-      canvas.drawLine(const Offset(13, -12), const Offset(5, -10), browPaint);
+      canvas.drawLine(const Offset(-13.0, -12.0), const Offset(-5.0, -10.0), browPaint);
+      canvas.drawLine(const Offset(13.0, -12.0), const Offset(5.0, -10.0), browPaint);
     }
 
     // لبخند
@@ -225,100 +212,74 @@ class FoxCharacterPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.4;
     if (pose == FoxPose.hurt) {
-      // لبخند معکوس
       canvas.drawPath(
         Path()
-          ..moveTo(-5, 11)
-          ..quadraticBezierTo(0, 8, 5, 11),
+          ..moveTo(-5.0, 11.0)
+          ..quadraticBezierTo(0.0, 8.0, 5.0, 11.0),
         smilePaint,
       );
     } else {
       canvas.drawPath(
         Path()
-          ..moveTo(-5, 9)
-          ..quadraticBezierTo(0, 12, 5, 9),
+          ..moveTo(-5.0, 9.0)
+          ..quadraticBezierTo(0.0, 12.0, 5.0, 9.0),
         smilePaint,
       );
     }
 
-    // گونه‌های صورتی با gradient
+    // گونه‌ها
     final cheekPaint = Paint()..color = const Color(0xFFF8BBD0).withValues(alpha: 0.75);
-    canvas.drawCircle(const Offset(-13, 6), 3.5, cheekPaint);
-    canvas.drawCircle(const Offset(13, 6), 3.5, cheekPaint);
+    canvas.drawCircle(const Offset(-13.0, 6.0), 3.5, cheekPaint);
+    canvas.drawCircle(const Offset(13.0, 6.0), 3.5, cheekPaint);
 
-    // دست‌ها با حالت‌های مختلف
+    // دست‌ها
     final armPaint = Paint()..color = const Color(0xFFFF7043);
     if (pose == FoxPose.run) {
       final armPhase1 = sin(runPhase + 0.5);
       final armPhase2 = sin(runPhase + 0.5 + 3.14);
       canvas.save();
-      canvas.translate(15, 5);
+      canvas.translate(15.0, 5.0);
       canvas.rotate(armPhase1 * 0.6);
-      canvas.drawRRect(
-        RRect.fromRectAndRadius(const Rect.fromLTWH(0, -3, 14, 7), const Radius.circular(3)),
-        armPaint,
-      );
+      canvas.drawRRect(RRect.fromRectAndRadius(const Rect.fromLTWH(0.0, -3.0, 14.0, 7.0), const Radius.circular(3.0)), armPaint);
       canvas.restore();
       canvas.save();
-      canvas.translate(-12, 5);
+      canvas.translate(-12.0, 5.0);
       canvas.rotate(armPhase2 * 0.6);
-      canvas.drawRRect(
-        RRect.fromRectAndRadius(const Rect.fromLTWH(-14, -3, 14, 7), const Radius.circular(3)),
-        armPaint,
-      );
+      canvas.drawRRect(RRect.fromRectAndRadius(const Rect.fromLTWH(-14.0, -3.0, 14.0, 7.0), const Radius.circular(3.0)), armPaint);
       canvas.restore();
     } else if (pose == FoxPose.jump) {
       canvas.save();
-      canvas.translate(15, 0);
+      canvas.translate(15.0, 0.0);
       canvas.rotate(-1.3);
-      canvas.drawRRect(
-        RRect.fromRectAndRadius(const Rect.fromLTWH(0, -3, 14, 7), const Radius.circular(3)),
-        armPaint,
-      );
+      canvas.drawRRect(RRect.fromRectAndRadius(const Rect.fromLTWH(0.0, -3.0, 14.0, 7.0), const Radius.circular(3.0)), armPaint);
       canvas.restore();
       canvas.save();
-      canvas.translate(-15, 0);
+      canvas.translate(-15.0, 0.0);
       canvas.rotate(1.3);
-      canvas.drawRRect(
-        RRect.fromRectAndRadius(const Rect.fromLTWH(-14, -3, 14, 7), const Radius.circular(3)),
-        armPaint,
-      );
+      canvas.drawRRect(RRect.fromRectAndRadius(const Rect.fromLTWH(-14.0, -3.0, 14.0, 7.0), const Radius.circular(3.0)), armPaint);
       canvas.restore();
     } else if (pose == FoxPose.hurt) {
-      // دست‌ها کنار سر
       canvas.save();
-      canvas.translate(15, -10);
+      canvas.translate(15.0, -10.0);
       canvas.rotate(-1.8);
-      canvas.drawRRect(
-        RRect.fromRectAndRadius(const Rect.fromLTWH(0, -3, 12, 6), const Radius.circular(3)),
-        armPaint,
-      );
+      canvas.drawRRect(RRect.fromRectAndRadius(const Rect.fromLTWH(0.0, -3.0, 12.0, 6.0), const Radius.circular(3.0)), armPaint);
       canvas.restore();
       canvas.save();
-      canvas.translate(-15, -10);
+      canvas.translate(-15.0, -10.0);
       canvas.rotate(1.8);
-      canvas.drawRRect(
-        RRect.fromRectAndRadius(const Rect.fromLTWH(-12, -3, 12, 6), const Radius.circular(3)),
-        armPaint,
-      );
+      canvas.drawRRect(RRect.fromRectAndRadius(const Rect.fromLTWH(-12.0, -3.0, 12.0, 6.0), const Radius.circular(3.0)), armPaint);
       canvas.restore();
     } else {
       final wave = sin(breathPhase * 1.5) * 0.12;
       canvas.save();
-      canvas.translate(15, 5);
+      canvas.translate(15.0, 5.0);
       canvas.rotate(-0.2 + wave);
-      canvas.drawRRect(
-        RRect.fromRectAndRadius(const Rect.fromLTWH(0, -3, 12, 6), const Radius.circular(3)),
-        armPaint,
-      );
+      canvas.drawRRect(RRect.fromRectAndRadius(const Rect.fromLTWH(0.0, -3.0, 12.0, 6.0), const Radius.circular(3.0)), armPaint);
       canvas.restore();
       canvas.save();
-      canvas.translate(-15, 5);
+      canvas.translate(-15.0, 5.0);
       canvas.rotate(0.2 - wave);
-      canvas.drawRRect(
-        RRect.fromRectAndRadius(const Rect.fromLTWH(-12, -3, 12, 6), const Radius.circular(3)),
-        armPaint,
-      );
+      canvas.drawRRect(RRect.fromRectAndRadius(const Rect.fromLTWH(-12.0, -3.0, 12.0, 6.0), const Radius.circular(3.0)), armPaint);
       canvas.restore();
     }
 
