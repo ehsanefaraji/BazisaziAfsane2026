@@ -1,0 +1,28 @@
+name: bazisazi_afsane
+description: "بازی‌سازی افسانه نسخهٔ ۷ — Flame/Forge2D کامل، چندمرحله‌ای، Sprite Sheet، JSON"
+publish_to: 'none'
+version: 7.0.0+7
+
+environment:
+  sdk: ^3.5.0
+  flutter: '>=3.24.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  shared_preferences: ^2.3.2
+  flame: ^1.18.0
+  flame_forge2d: ^0.18.0
+  flame_splash_screen: ^1.0.0
+  audioplayers: ^6.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/sprites/
