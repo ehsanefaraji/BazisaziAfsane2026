@@ -119,9 +119,8 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: unlocked
-            ? AppPalette.buttonGradient
-            : Colors.white.withValues(alpha: 0.05),
+        gradient: unlocked ? AppPalette.buttonGradient : null,
+        color: unlocked ? null : Colors.white.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: unlocked ? Colors.white.withValues(alpha: 0.4) : Colors.white.withValues(alpha: 0.1),
