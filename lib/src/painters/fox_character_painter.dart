@@ -52,7 +52,7 @@ class FoxCharacterPainter extends CustomPainter {
     }
 
     // شنل بنفش با sway هنگام run
-    final capeSway = pose == FoxPose.run ? sin(runPhase * 2) * 4 : 0;
+    final capeSway = (pose == FoxPose.run ? sin(runPhase * 2) * 4 : 0).toDouble();
     final capePaint = Paint()..color = const Color(0xFF7E57C2);
     final capePath = Path()
       ..moveTo(-22, -10)
@@ -78,7 +78,7 @@ class FoxCharacterPainter extends CustomPainter {
 
     // دم پف‌دار با حرکت نوسانی شدیدتر
     final tailY = pose == FoxPose.run ? -8 : 0;
-    final tailSway = sin(breathPhase * 1.5) * 3;
+    final tailSway = (sin(breathPhase * 1.5) * 3).toDouble();
     final tailPaint = Paint()..color = const Color(0xFFFF7043);
     final tailPath = Path()
       ..moveTo(-18, 15 + tailY)
